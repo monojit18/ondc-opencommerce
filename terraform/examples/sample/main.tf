@@ -64,14 +64,14 @@ locals {
   key_id           = "ec7ae8e8-f211-40ac-946f-a3407d0a76bb"
   ondc_environment = "pre-production"
 
-  location = "us-central1"
+  location = "asia-southeast1"
 }
 
 locals {
   artifact_registry = {
     project_id = var.project_id
     location   = var.location
-    repository = "ondc-open-commerce"
+    repository = "ondc-l1-repo"
   }
 }
 
@@ -89,7 +89,7 @@ resource "google_gke_hub_feature" "servicemesh" {
 resource "google_service_account" "dev_buyer_cluster" {
   provider = google
 
-  account_id   = "dev-buyer-cluster"
+  account_id   = "dev-buyer-sa"
   display_name = "Dev Buyer Service Account"
 }
 
@@ -97,7 +97,7 @@ resource "google_service_account" "dev_buyer_cluster" {
 resource "google_service_account" "dev_seller_cluster" {
   provider = google
 
-  account_id   = "dev-seller-cluster"
+  account_id   = "dev-seller-sa"
   display_name = "Dev Seller Service Account"
 }
 
@@ -150,7 +150,7 @@ module "dev_buyer_app" {
   artifact_registry = local.artifact_registry
 
   region                 = local.location
-  zones                  = ["us-central1-c"]
+  zones                  = ["asia-southeast1-a", "asia-southeast1-b", "asia-southeast1-c"]
   network_name           = "dev-buyer-network"
   subnet_name            = "dev-buyer-subnet"
   subnet_ip              = "10.0.0.0/18"
@@ -158,7 +158,7 @@ module "dev_buyer_app" {
   ip_range_services_name = "dev-buyer-ip-range-services"
   ip_range_pods          = "192.168.0.0/18"
   ip_range_services      = "192.168.64.0/18"
-  buyer_app_allow_hosts  = ["10.0.0.7/18"]
+  buyer_app_allow_hosts  = ["*"]
 
   horizontal_pod_autoscaling = false
   node_pool_name             = "dev-buyer-node-pool"
@@ -197,7 +197,7 @@ module "dev_seller_app" {
   artifact_registry = local.artifact_registry
 
   region                 = local.location
-  zones                  = ["us-central1-c"]
+  zones                  = ["asia-southeast1-a", "asia-southeast1-b", "asia-southeast1-c"]
   network_name           = "dev-seller-network"
   subnet_name            = "dev-seller-subnet"
   subnet_ip              = "10.0.0.0/18"
@@ -236,7 +236,7 @@ module "dev-loadbalancer" {
   env_prefix = "dev-"
   name       = "example-lb"
 
-  address                   = "122.96.84.212"
+  address                   = "34.107.239.220"
   domains                   = ["example.com"]
   random_certificate_suffix = true
 
