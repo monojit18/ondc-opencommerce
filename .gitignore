@@ -47,3 +47,7 @@ terraform.rc
 
 # service account key
 **/ondc-l1-accl-180920232021-sa.json
+
+# terraform intermediate files
+**/.terraform
+**/*.plan
