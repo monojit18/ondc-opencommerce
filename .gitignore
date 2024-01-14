@@ -41,3 +41,9 @@ terraform.rc
 
 # Secrets
 **/secrets
+
+# commands
+**/commands.txt
+
+# service account key
+**/ondc-l1-accl-180920232021-sa.json
